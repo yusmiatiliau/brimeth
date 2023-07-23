@@ -51,6 +51,7 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { SAMTOOLS_BAM2FQ             } from '../modules/nf-core/samtools/bam2fq/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,6 +73,16 @@ workflow BRIMETH {
         ch_input
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+
+    //
+    // MODULE: Run samtools/bam2fq
+    //
+    SAMTOOLS_BAM2FQ (
+        INPUT_CHECK.out.reads
+        false
+    )
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+
 
     //
     // MODULE: Run FastQC
