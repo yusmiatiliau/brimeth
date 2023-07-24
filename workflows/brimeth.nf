@@ -81,14 +81,11 @@ workflow BRIMETH {
         INPUT_CHECK.out.reads
         false
     )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
-
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        INPUT_CHECK.out.reads
+        SAMTOOLS_BAM2FQ.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
