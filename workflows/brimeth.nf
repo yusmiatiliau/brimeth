@@ -78,7 +78,7 @@ workflow BRIMETH {
     // MODULE: Run samtools/bam2fq
     //
     SAMTOOLS_BAM2FQ (
-        INPUT_CHECK.out.reads
+        INPUT_CHECK.out.reads,
         false
     )
     //

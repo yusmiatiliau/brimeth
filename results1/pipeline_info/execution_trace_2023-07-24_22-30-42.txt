@@ -1,0 +1,2 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	24/7e677d	855	NFCORE_BRIMETH:BRIMETH:INPUT_CHECK:SAMPLESHEET_CHECK (samplesheet_test.csv)	FAILED	1	2023-07-24 22:30:48.103	8.7s	8.7s	-	-	-	-	-
