@@ -1,8 +1,0 @@
-CUSTOM_DUMPSOFTWAREVERSIONS:
-  python: 3.11.0
-  yaml: '6.0'
-FASTQC:
-  fastqc: 0.11.9
-Workflow:
-  Nextflow: 23.04.2
-  nf-core/brimeth: 1.0dev
