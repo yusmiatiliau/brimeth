@@ -52,6 +52,7 @@ include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { SAMTOOLS_BAM2FQ             } from '../modules/nf-core/samtools/bam2fq/main'
+include { MINIMAP2_ALIGN              } from '../modules/nf-core/minimap2/align/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,6 +116,17 @@ workflow BRIMETH {
         ch_multiqc_logo.toList()
     )
     multiqc_report = MULTIQC.out.report.toList()
+
+    //
+    // MODULE: Run minimap2/align
+    //
+    MINIMAP2_ALIGN (
+        SAMTOOLS_BAM2FQ.out.reads,
+        fasta,
+        true,
+        false,
+        false
+    )
 }
 
 /*
