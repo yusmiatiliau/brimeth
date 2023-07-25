@@ -37,7 +37,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+//include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,16 +70,24 @@ workflow BRIMETH {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
-    INPUT_CHECK (
-        ch_input
-    )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    //INPUT_CHECK (
+    //    ch_input
+    //)
+    //ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+
+    Channel
+    .fromPath( params.input )
+    .splitCsv( header: true )
+    .map{ row -> [[id:row.sample], file(row.bam) ] }
+    .set{ my_samples }
+
+    my_samples.view()
 
     //
     // MODULE: Run samtools/bam2fq
     //
     SAMTOOLS_BAM2FQ (
-        INPUT_CHECK.out.reads,
+        my_samples,
         false
     )
     //
@@ -122,7 +130,7 @@ workflow BRIMETH {
     //
     MINIMAP2_ALIGN (
         SAMTOOLS_BAM2FQ.out.reads,
-        fasta,
+        params.fasta,
         true,
         false,
         false
