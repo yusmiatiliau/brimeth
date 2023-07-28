@@ -53,6 +53,9 @@ include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { SAMTOOLS_BAM2FQ             } from '../modules/nf-core/samtools/bam2fq/main'
 include { MINIMAP2_ALIGN              } from '../modules/nf-core/minimap2/align/main'
+include { SAMTOOLS_INDEX              } from '../modules/nf-core/samtools/index/main'
+
+include { BAM_STATS_SAMTOOLS          } from '../subworkflows/nf-core/bam_stats_samtools/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -103,6 +106,31 @@ workflow BRIMETH {
     )
 
     //
+    // MODULE: Run minimap2/align
+    //
+    MINIMAP2_ALIGN (
+        SAMTOOLS_BAM2FQ.out.reads,
+        params.fasta,
+        params.bam_format,
+        params.cigar_paf_format,
+        params.cigar_bam
+    )
+
+    ch_bam = MINIMAP2_ALIGN.out.bam
+
+    SAMTOOLS_INDEX {
+        ch_bam
+    }
+    ch_bai = SAMTOOLS_INDEX.out.bai
+
+    ch_bam_bai = ch_bam.join(ch_bai) // channel: [ val(meta), path(bam), path(bai) ]
+
+    BAM_STATS_SAMTOOLS (
+        ch_bam_bai,
+        [[:], params.fasta]
+    )
+
+    //
     // MODULE: MultiQC
     //
     workflow_summary    = WorkflowBrimeth.paramsSummaryMultiqc(workflow, summary_params)
@@ -125,16 +153,6 @@ workflow BRIMETH {
     )
     multiqc_report = MULTIQC.out.report.toList()
 
-    //
-    // MODULE: Run minimap2/align
-    //
-    MINIMAP2_ALIGN (
-        SAMTOOLS_BAM2FQ.out.reads,
-        params.fasta,
-        params.bam_format,
-        params.cigar_paf_format,
-        params.cigar_bam
-    )
 }
 
 /*
