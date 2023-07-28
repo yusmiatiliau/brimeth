@@ -265,6 +265,33 @@
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
                 }
             }
+        },
+        "minimap2_functions": {
+            "title": "Minimap2 Functions",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fab fa-black-tie",
+            "properties": {
+                "cigar_bam": {
+                    "type": "boolean",
+                    "description": "Do you want to have a cigar bam"
+                },
+                "cigar_paf_format": {
+                    "type": "boolean",
+                    "description": "Do you want to have a paf format file"
+                },
+                "bam_format": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Do you want to have a bam format file"
+                },
+                "schema_ignore_params": {
+                    "type": "string",
+                    "default": "genomes",
+                    "description": "I'm not 100% sure what this is?"
+                }
+            }
         }
     },
     "allOf": [
@@ -282,6 +309,9 @@
         },
         {
             "$ref": "#/definitions/generic_options"
+        },
+        {
+            "$ref": "#/definitions/minimap2_functions"
         }
     ]
 }

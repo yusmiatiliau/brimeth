@@ -131,9 +131,9 @@ workflow BRIMETH {
     MINIMAP2_ALIGN (
         SAMTOOLS_BAM2FQ.out.reads,
         params.fasta,
-        true,
-        false,
-        false
+        params.bam_format,
+        params.cigar_paf_format,
+        params.cigar_bam
     )
 }
 
