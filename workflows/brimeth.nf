@@ -52,6 +52,7 @@ include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { SAMTOOLS_BAM2FQ             } from '../modules/nf-core/samtools/bam2fq/main'
+include { CHOPPER                     } from '../modules/nf-core/chopper/main'
 include { MINIMAP2_ALIGN              } from '../modules/nf-core/minimap2/align/main'
 include { SAMTOOLS_INDEX              } from '../modules/nf-core/samtools/index/main'
 
@@ -106,10 +107,17 @@ workflow BRIMETH {
     )
 
     //
+    // MODULE: Run chopper
+    //
+    CHOPPER (
+        SAMTOOLS_BAM2FQ.out.reads
+    )
+
+    //
     // MODULE: Run minimap2/align
     //
     MINIMAP2_ALIGN (
-        SAMTOOLS_BAM2FQ.out.reads,
+        CHOPPER.out.reads,
         params.fasta,
         params.bam_format,
         params.cigar_paf_format,
