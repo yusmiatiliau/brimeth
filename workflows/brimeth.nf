@@ -117,7 +117,7 @@ workflow BRIMETH {
     // MODULE: Run minimap2/align
     //
     MINIMAP2_ALIGN (
-        CHOPPER.out.reads,
+        CHOPPER.out.fastq,
         params.fasta,
         params.bam_format,
         params.cigar_paf_format,
