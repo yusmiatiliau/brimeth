@@ -71,14 +71,6 @@ workflow BRIMETH {
 
     ch_versions = Channel.empty()
 
-    //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    //
-    //INPUT_CHECK (
-    //    ch_input
-    //)
-    //ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-
     Channel
     .fromPath( params.input )
     .splitCsv( header: true )
@@ -102,16 +94,13 @@ workflow BRIMETH {
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
-    CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
-    )
-
     //
     // MODULE: Run chopper
     //
     CHOPPER (
         SAMTOOLS_BAM2FQ.out.reads
     )
+    ch_versions = ch_versions.mix(CHOPPER.out.versions.first())
 
     //
     // MODULE: Run minimap2/align
@@ -123,6 +112,7 @@ workflow BRIMETH {
         params.cigar_paf_format,
         params.cigar_bam
     )
+    ch_versions = ch_versions.mix(MINIMAP2_ALIGN.out.versions)
 
     ch_bam = MINIMAP2_ALIGN.out.bam
 
@@ -136,6 +126,10 @@ workflow BRIMETH {
     BAM_STATS_SAMTOOLS (
         ch_bam_bai,
         [[:], params.fasta]
+    )
+
+    CUSTOM_DUMPSOFTWAREVERSIONS (
+        ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
 
     //
