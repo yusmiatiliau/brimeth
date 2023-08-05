@@ -1,0 +1,4 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	cf/a81b23	2649	NFCORE_BRIMETH:BRIMETH:SAMTOOLS_BAM2FQ (test)	COMPLETED	0	2023-08-05 10:04:40.967	8.3s	1s	108.2%	9.8 MB	235.2 MB	23.5 MB	16.9 MB
+3	1b/43f6fe	3396	NFCORE_BRIMETH:BRIMETH:CHOPPER (test)	FAILED	2	2023-08-05 10:04:49.264	18s	18s	-	-	-	-	-
+2	34/8cf003	3382	NFCORE_BRIMETH:BRIMETH:FASTQC (test)	COMPLETED	0	2023-08-05 10:04:49.252	19.3s	4s	180.5%	347.3 MB	3.5 GB	0	0
