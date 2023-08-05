@@ -292,6 +292,30 @@
                     "description": "I'm not 100% sure what this is?"
                 }
             }
+        },
+        "chopper": {
+            "title": "Chopper",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "minlength": {
+                    "type": "integer",
+                    "default": 2000,
+                    "description": "min read length to filter"
+                },
+                "maxlength": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "max read length to filter"
+                },
+                "quality": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "min quality score to filter"
+                }
+            },
+            "required": ["minlength", "maxlength", "quality"]
         }
     },
     "allOf": [
@@ -312,6 +336,9 @@
         },
         {
             "$ref": "#/definitions/minimap2_functions"
+        },
+        {
+            "$ref": "#/definitions/chopper"
         }
     ]
 }
