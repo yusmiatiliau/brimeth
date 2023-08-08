@@ -38,7 +38,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
-
+include   { qualimap              } from '../modules/local/qualimap.nf'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
@@ -112,16 +112,31 @@ workflow BRIMETH {
         params.cigar_paf_format,
         params.cigar_bam
     )
+
     ch_versions = ch_versions.mix(MINIMAP2_ALIGN.out.versions)
 
     ch_bam = MINIMAP2_ALIGN.out.bam
 
+    //
+    // MODULE: Run Samtools index
+    //
     SAMTOOLS_INDEX {
         ch_bam
     }
     ch_bai = SAMTOOLS_INDEX.out.bai
 
     ch_bam_bai = ch_bam.join(ch_bai) // channel: [ val(meta), path(bam), path(bai) ]
+
+    //
+    // MODULE: Run Qualimap
+    //
+    qualimap (
+        ch_bam,
+        params.fasta,
+        params.bam_format,
+        params.cigar_paf_format,
+        params.cigar_bam
+    )
 
     BAM_STATS_SAMTOOLS (
         ch_bam_bai,
