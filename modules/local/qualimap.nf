@@ -36,7 +36,7 @@ process QUALIMAP {
     // TODO nf-core: Where applicable please provide/convert compressed files as input/output
     //               e.g. "*.fastq.gz" and NOT "*.fastq", "*.bam" and NOT "*.sam" etc.
     tuple val(meta), path(bam)
-    path gff
+    //path gff
 
     output:
     tuple val(meta), path("${prefix}"), emit: results
@@ -48,8 +48,8 @@ process QUALIMAP {
     script:
     def args    = task.ext.args ?: ''
     def prefix  = task.ext.prefix ?: "${meta.id}"
-    def regions = gff ? "--gff $gff": ''
-    def memory  = (task.memory.mega*0.8).intValue() + 'M'
+    //def regions = gff ? "--gff $gff": ''
+    //def memory  = (task.memory.mega*0.8).intValue() + 'M'
 
     // TODO nf-core: Where possible, a command MUST be provided to obtain the version number of the software e.g. 1.10
     //               If the software is unable to output a version number on the command-line then it can be manually specified
@@ -71,20 +71,16 @@ process QUALIMAP {
     //    strandedness = 'strand-specific-reverse'
     //}
 
+    // unset DISPLAY
+    // mkdir -p tmp
+    // export_JAVA_OPTIONS=Djava.io.tmpdir=./tmp
 
     """
-    unset DISPLAY
-    mkdir -p tmp
-    export_JAVA_OPTIONS=Djava.io.tmpdir=./tmp
     qualimap \\
         bamqc \\
-        -bam $ch_bam \\
-        -@ $task.cpus \\
+        -bam $bam \\
         -outdir $prefix \\
-        -args \\
-        $regions \\
-        -outdir $prefix \\
-        -nt $task.cpus
+        -nt $task.cpus \\
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
