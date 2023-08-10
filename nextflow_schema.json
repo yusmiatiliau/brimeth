@@ -314,8 +314,7 @@
                     "default": 10,
                     "description": "min quality score to filter"
                 }
-            },
-            "required": ["minlength", "maxlength", "quality"]
+            }
         }
     },
     "allOf": [
