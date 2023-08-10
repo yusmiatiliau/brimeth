@@ -130,13 +130,10 @@ workflow BRIMETH {
     //
     // MODULE: Run Qualimap
     //
-    qualimap (
-        ch_bam,
-        params.fasta,
-        params.bam_format,
-        params.cigar_paf_format,
-        params.cigar_bam
-    )
+    //qualimap {
+    //    ch_bam,
+    //    [[:],params.gff]
+    //}
 
     BAM_STATS_SAMTOOLS (
         ch_bam_bai,

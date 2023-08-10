@@ -36,24 +36,21 @@ process QUALIMAP {
     // TODO nf-core: Where applicable please provide/convert compressed files as input/output
     //               e.g. "*.fastq.gz" and NOT "*.fastq", "*.bam" and NOT "*.sam" etc.
     tuple val(meta), path(bam)
+    path gff
 
-    output:
-    tuple val(meta), path("*.html"), optional: true, emit: html
-    tuple val(meta), path("*.txt"), optional: true, emit: txt
-    path "versions.yml"           , emit: versions
-
-    output:
-    // TODO nf-core: Named file extensions MUST be emitted for ALL output channels
     output:
     tuple val(meta), path("${prefix}"), emit: results
-    path "versions.yml"           , emit: versions
+    path "versions.yml"               , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def args    = task.ext.args ?: ''
+    def prefix  = task.ext.prefix ?: "${meta.id}"
+    def regions = gff ? "--gff $gff": ''
+    def memory  = (task.memory.mega*0.8).intValue() + 'M'
+
     // TODO nf-core: Where possible, a command MUST be provided to obtain the version number of the software e.g. 1.10
     //               If the software is unable to output a version number on the command-line then it can be manually specified
     //               e.g. https://github.com/nf-core/modules/blob/master/modules/nf-core/homer/annotatepeaks/main.nf
@@ -63,9 +60,6 @@ process QUALIMAP {
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     // TODO nf-core: Please replace the example samtools command below with your module's command
     // TODO nf-core: Please indent the command appropriately (4 spaces!!) to help with readability ;)
-    def args = task.ext.args   ?: ''
-    prefix   = task.ext.prefix ?: "${meta.id}"
-
     //def collect_pairs = meta.single_end ? '' : '--collect-overlap-pairs'
     //def memory = (task.memory.mega*0.8).intValue() + 'M'
     //def regions = gff ? "--gff $gff" : ''
@@ -79,125 +73,22 @@ process QUALIMAP {
 
 
     """
+    unset DISPLAY
+    mkdir -p tmp
+    export_JAVA_OPTIONS=Djava.io.tmpdir=./tmp
     qualimap \\
         bamqc \\
         -bam $ch_bam \\
         -@ $task.cpus \\
         -outdir $prefix \\
         -args \\
-        
-
-        qualimap bamqc -bam /nesi/nobackup/brins03581/Cen/SB09/dorado/SB09_5mC_merged_filteredQ15_aligned_sorted.bam
-        -outdir /nesi/nobackup/brins03581/Cen/SB09/dorado/qualimap_SB09
-        --java-mem-size=48G
-
-    unset DISPLAY
-    mkdir -p tmp
-    export _JAVA_OPTIONS=-Djava.io.tmpdir=./tmp
-    qualimap \\
-        --java-mem-size=$memory \\
-        bamqc \\
-        $args \\
-        -bam $bam \\
         $regions \\
-        -p $strandedness \\
-        $collect_pairs \\
         -outdir $prefix \\
         -nt $task.cpus
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        qualimap: \$(echo \$(qualimap 2>&1) | sed 's/^.*QualiMap v.//; s/Built.*\$//')
-    END_VERSIONS
-    """
-
-    stub:
-    prefix = task.ext.suffix ? "${meta.id}${task.ext.suffix}" : "${meta.id}"
-    """
-    mkdir -p $prefix/css
-    mkdir $prefix/images_qualimapReport
-    mkdir $prefix/raw_data_qualimapReport
-    cd $prefix/css
-    touch agogo.css
-    touch basic.css
-    touch bgtop.png
-    touch comment-close.png
-    touch doctools.js
-    touch down-pressed.png
-    touch jquery.js
-    touch plus.png
-    touch qualimap_logo_small.png
-    touch searchtools.js
-    touch up.png
-    touch websupport.js
-    touch ajax-loader.gif
-    touch bgfooter.png
-    touch comment-bright.png
-    touch comment.png
-    touch down.png
-    touch file.png
-    touch minus.png
-    touch pygments.css
-    touch report.css
-    touch underscore.js
-    touch up-pressed.png
-    cd ../images_qualimapReport/
-    touch genome_coverage_0to50_histogram.png
-    touch genome_coverage_quotes.png
-    touch genome_insert_size_across_reference.png
-    touch genome_mapping_quality_histogram.png
-    touch genome_uniq_read_starts_histogram.png
-    touch genome_coverage_across_reference.png
-    touch genome_gc_content_per_window.png
-    touch genome_insert_size_histogram.png
-    touch genome_reads_clipping_profile.png
-    touch genome_coverage_histogram.png
-    touch genome_homopolymer_indels.png
-    touch genome_mapping_quality_across_reference.png
-    touch genome_reads_content_per_read_position.png
-    cd ../raw_data_qualimapReport
-    touch coverage_across_reference.txt
-    touch genome_fraction_coverage.txt
-    touch insert_size_histogram.txt
-    touch mapped_reads_nucleotide_content.txt
-    touch coverage_histogram.txt
-    touch homopolymer_indels.txt
-    touch mapped_reads_clipping_profile.txt
-    touch mapping_quality_across_reference.txt
-    touch duplication_rate_histogram.txt
-    touch insert_size_across_reference.txt
-    touch mapped_reads_gc-content_distribution.txt
-    touch mapping_quality_histogram.txt
-    cd ../
-    touch genome_results.txt
-    touch qualimapReport.html
-    cd ../
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        qualimap: \$(echo \$(qualimap 2>&1) | sed 's/^.*QualiMap v.//; s/Built.*\$//')
-    END_VERSIONS
-    """
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        : \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//' ))
-    END_VERSIONS
-    """
-
-    stub:
-    def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    // TODO nf-core: A stub section should mimic the execution of the original module as best as possible
-    //               Have a look at the following examples:
-    //               Simple example: https://github.com/nf-core/modules/blob/818474a292b4860ae8ff88e149fbcda68814114d/modules/nf-core/bcftools/annotate/main.nf#L47-L63
-    //               Complex example: https://github.com/nf-core/modules/blob/818474a292b4860ae8ff88e149fbcda68814114d/modules/nf-core/bedtools/split/main.nf#L38-L54
-    """
-    touch ${prefix}.bam
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        : \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//' ))
+        qualimap: \$(echo \$(qualimap --version 2>&1) | sed 's/^.*QualiMap //; s/Using.*\$//')
     END_VERSIONS
     """
 }
