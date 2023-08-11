@@ -71,26 +71,30 @@ workflow BRIMETH {
 
     ch_versions = Channel.empty()
 
+    //
+    // Create input channels
+    //
     Channel
     .fromPath( params.input )
     .splitCsv( header: true )
     .map{ row -> [[id:row.sample], file(row.bam) ] }
     .set{ my_samples }
 
-    my_samples.view()
-
     //
     // MODULE: Run samtools/bam2fq
     //
     SAMTOOLS_BAM2FQ (
         my_samples,
-        false
+        params.split
     )
+    ch_reads    = SAMTOOLS_BAM2FQ.out.reads
+    ch_versions = ch_versions.mix(SAMTOOLS_BAM2FQ.out.versions.first())
+
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        SAMTOOLS_BAM2FQ.out.reads
+        ch_reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
@@ -98,24 +102,23 @@ workflow BRIMETH {
     // MODULE: Run chopper
     //
     CHOPPER (
-        SAMTOOLS_BAM2FQ.out.reads
+        ch_reads
     )
-    ch_versions = ch_versions.mix(CHOPPER.out.versions.first())
+    ch_chopper_fastq = CHOPPER.out.fastq // channel: [ val(meta), ?? ]
+    ch_versions      = ch_versions.mix(CHOPPER.out.versions.first())
 
     //
     // MODULE: Run minimap2/align
     //
     MINIMAP2_ALIGN (
-        CHOPPER.out.fastq,
+        ch_chopper_fastq,
         params.fasta,
         params.bam_format,
         params.cigar_paf_format,
         params.cigar_bam
     )
-
+    ch_bam = MINIMAP2_ALIGN.out.bam // channel: [ val(meta), file(bai) ]
     ch_versions = ch_versions.mix(MINIMAP2_ALIGN.out.versions)
-
-    ch_bam = MINIMAP2_ALIGN.out.bam
 
     //
     // MODULE: Run Samtools index
@@ -123,8 +126,10 @@ workflow BRIMETH {
     SAMTOOLS_INDEX {
         ch_bam
     }
-    ch_bai = SAMTOOLS_INDEX.out.bai
+    ch_bai = SAMTOOLS_INDEX.out.bai // channel: [ val(meta), file(bai) ]
+    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
+    // Mix bam and bai
     ch_bam_bai = ch_bam.join(ch_bai) // channel: [ val(meta), path(bam), path(bai) ]
 
     //
