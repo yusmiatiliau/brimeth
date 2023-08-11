@@ -79,10 +79,12 @@ workflow BRIMETH {
     //
     // Download model
     //
+    // https://github.com/christopher-hakkaart/nanoseq/blob/local_to_nfcore/modules/local/dorado_model.nf
 
     //
     // Run Dorado
     //
+    // https://github.com/christopher-hakkaart/nanoseq/blob/local_to_nfcore/modules/local/dorado_basecaller.nf
 
     //
     // Create input channels
