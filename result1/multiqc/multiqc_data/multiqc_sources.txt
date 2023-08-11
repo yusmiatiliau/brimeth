@@ -1,2 +1,0 @@
-Module	Section	Sample Name	Source
-FastQC	all_sections	test	/workspace/brimeth/work/ab/719c699a88fa67678093fbb3d8607d/3/test_fastqc.zip
