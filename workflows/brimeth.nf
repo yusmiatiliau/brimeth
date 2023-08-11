@@ -72,6 +72,19 @@ workflow BRIMETH {
     ch_versions = Channel.empty()
 
     //
+    // Folder input
+    //
+    // Single pod5 file is easist
+
+    //
+    // Download model
+    //
+
+    //
+    // Run Dorado
+    //
+
+    //
     // Create input channels
     //
     Channel
