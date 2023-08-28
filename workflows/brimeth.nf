@@ -39,6 +39,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include   { QUALIMAP              } from '../modules/local/qualimap.nf'
+include   { MODKIT                } from '../modules/local/modkit.nf'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
@@ -154,11 +155,20 @@ workflow BRIMETH {
         ch_bam,
         //[[:],params.gff]
     )
-
+    //
+    // MODULE: Run Samtools_stats
+    //
     BAM_STATS_SAMTOOLS (
         ch_bam_bai,
         [[:], params.fasta]
     )
+    //
+    // MODULE: Run Modkit
+    //
+    MODKIT {
+        ch_bam
+    }
+    ch_bed = MODKIT.out.bed // channel: [ val(meta), file(bed) ]
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
