@@ -16,10 +16,10 @@
 //               list (`[]`) instead of a file can be used to work around this issue.
 
 process MODKIT {
-    tag '$meta.id'
+    tag "$meta.id"
     label 'process_low'
 
-    container 'ontresearch/wf-somatic-methyl:shac81dbea5f824cc43fd7aeb9ad99b4efe1503216e'
+    container "docker.io/ontresearch/wf-somatic-methyl:shac81dbea5f824cc43fd7aeb9ad99b4efe1503216e"
 
     input:
     // TODO nf-core: Where applicable all sample-specific information e.g. "id", "single_end", "read_group"
