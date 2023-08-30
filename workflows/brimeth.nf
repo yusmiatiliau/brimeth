@@ -166,7 +166,7 @@ workflow BRIMETH {
     // MODULE: Run Modkit
     //
     MODKIT {
-        ch_bam
+        ch_bam_bai
     }
     ch_bed = MODKIT.out.bed // channel: [ val(meta), file(bed) ]
 
