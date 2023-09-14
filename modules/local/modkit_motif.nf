@@ -22,18 +22,14 @@ process MODKIT {
     container "docker.io/ontresearch/wf-somatic-methyl:shac81dbea5f824cc43fd7aeb9ad99b4efe1503216e"
 
     input:
-    // TODO nf-core: Where applicable all sample-specific information e.g. "id", "single_end", "read_group"
-    //               MUST be provided as an input via a Groovy Map called "meta".
-    //               This information may not be required in some instances e.g. indexing reference genome files:
-    //               https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/index/main.nf
-    // TODO nf-core: Where applicable please provide/convert compressed files as input/output
-    //               e.g. "*.fastq.gz" and NOT "*.fastq", "*.bam" and NOT "*.sam" etc.
-    tuple val(meta), path(bam), path(bai)
+        path(fasta)
 
     output:
     // TODO nf-core: Named file extensions MUST be emitted for ALL output channels
-    tuple val(meta), path("*.bed"), emit: bed
-    tuple val(meta), path("*.log"), emit: log
+    path("*.CG.bed")    , emit: CG.bed
+    path("*.CHG.bed")   , emit: CHG.bed
+    path("*.CHH.bed")   , emit: CHH.bed
+    path("*.6mA.bed")   , emit: 6mA.bed
     // TODO nf-core: List additional required output channels/values here
     path "versions.yml"             , emit: versions
 
@@ -41,12 +37,10 @@ process MODKIT {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args   ?: ''
-    def args2  = task.ext.args2  ?: ''
-
     """
-    modkit pileup \\
-    $bam \\
+    modkit motif.bed \\
+    $fasta \\
+    ${param.motif}
     ${meta.id}.bed \\
     $args \\
     $args2 \\

@@ -39,7 +39,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include   { QUALIMAP              } from '../modules/local/qualimap.nf'
-include   { MODKIT                } from '../modules/local/modkit.nf'
+include   { MODKIT_PILEUP         } from '../modules/local/modkit_pileup.nf'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
@@ -165,10 +165,11 @@ workflow BRIMETH {
     //
     // MODULE: Run Modkit
     //
-    MODKIT {
+    MODKIT_PILEUP {
         ch_bam_bai
     }
-    ch_bed = MODKIT.out.bed // channel: [ val(meta), file(bed) ]
+    ch_bed = MODKIT_PILEUP.out.bed // channel: [ val(meta), file(bed) ]
+    ch_versions = ch_versions.mix(MODKIT_PILEUP.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
