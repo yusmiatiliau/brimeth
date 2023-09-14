@@ -19,7 +19,8 @@ process MODKIT_PILEUP {
     tag "$meta.id"
     label 'process_low'
 
-    container "docker.io/ontresearch/wf-somatic-methyl:shac81dbea5f824cc43fd7aeb9ad99b4efe1503216e"
+    //container "docker.io/ontresearch/wf-somatic-methyl:shac81dbea5f824cc43fd7aeb9ad99b4efe1503216e"
+    container "docker.io/ontresearch/wf-human-variation-methyl:shaa6e616571797d97ae2736c7ebdcb4613fe77f263"
 
     input:
     // TODO nf-core: Where applicable all sample-specific information e.g. "id", "single_end", "read_group"
