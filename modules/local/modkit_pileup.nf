@@ -17,7 +17,7 @@
 
 process MODKIT_PILEUP {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_high'
 
     //container "docker.io/ontresearch/wf-somatic-methyl:shac81dbea5f824cc43fd7aeb9ad99b4efe1503216e"
     container "docker.io/ontresearch/wf-human-variation-methyl:shaa6e616571797d97ae2736c7ebdcb4613fe77f263"
@@ -42,15 +42,21 @@ process MODKIT_PILEUP {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args   ?: ''
+    def threshold   = task.ext.threshold   ?: ''
     def args2  = task.ext.args2  ?: ''
+    def ref    = motif_CG || motif_CHG || motif_CHH || motif_A ? "${reference ?: reads}"
 
     """
     modkit pileup \\
     $bam \\
     ${meta.id}.bed \\
-    $args \\
+    $threshold \\
     $args2 \\
+    $motif_CG \\
+    $motif_CHG \\
+    $motif_CHH \\
+    $motif_A \\
+    $ref \\
     --log-filepath ${meta.id}.log
 
     cat <<-END_VERSIONS > versions.yml
