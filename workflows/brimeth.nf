@@ -35,11 +35,17 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 */
 
 //
+// MODULES: Consisting of local modules
+//
+include   { QUALIMAP              } from '../modules/local/qualimap.nf'
+include   { MODKIT_PILEUP         } from '../modules/local/modkit_pileup.nf'
+
+//
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
-include   { QUALIMAP              } from '../modules/local/qualimap.nf'
-include   { MODKIT_PILEUP         } from '../modules/local/modkit_pileup.nf'
+include   { BAM_TO_FASTQ          } from '../subworkflows/local/bam_fastq.nf'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
@@ -49,11 +55,11 @@ include   { MODKIT_PILEUP         } from '../modules/local/modkit_pileup.nf'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC                      } from '../modules/nf-core/fastqc/main'
+//include { FASTQC                      } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { SAMTOOLS_BAM2FQ             } from '../modules/nf-core/samtools/bam2fq/main'
-include { CHOPPER                     } from '../modules/nf-core/chopper/main'
+//include { SAMTOOLS_BAM2FQ             } from '../modules/nf-core/samtools/bam2fq/main'
+//include { CHOPPER                     } from '../modules/nf-core/chopper/main'
 include { MINIMAP2_ALIGN              } from '../modules/nf-core/minimap2/align/main'
 include { SAMTOOLS_INDEX              } from '../modules/nf-core/samtools/index/main'
 
@@ -97,31 +103,14 @@ workflow BRIMETH {
     .set{ my_samples }
 
     //
-    // MODULE: Run samtools/bam2fq
+    // SUBWORKFLOW: Bam to Fastq + QC
     //
-    SAMTOOLS_BAM2FQ (
-        my_samples,
-        params.split
+    BAM_TO_FASTQ (
+        my_samples
     )
-    ch_reads    = SAMTOOLS_BAM2FQ.out.reads
-    ch_versions = ch_versions.mix(SAMTOOLS_BAM2FQ.out.versions.first())
-
-    //
-    // MODULE: Run FastQC
-    //
-    FASTQC (
-        ch_reads
-    )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
-    //
-    // MODULE: Run chopper
-    //
-    CHOPPER (
-        ch_reads
-    )
-    ch_chopper_fastq = CHOPPER.out.fastq // channel: [ val(meta), ?? ]
-    ch_versions      = ch_versions.mix(CHOPPER.out.versions.first())
+    ch_fastqc_zip    = BAM_TO_FASTQ.out.fastqc_zip
+    ch_chopper_fastq = BAM_TO_FASTQ.out.chopper_fastq
+    ch_versions      = ch_versions.mix(BAM_TO_FASTQ.out.versions)
 
     //
     // MODULE: Run minimap2/align
@@ -191,7 +180,7 @@ workflow BRIMETH {
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_fastqc_zip)
 
     MULTIQC (
         ch_multiqc_files.collect(),
