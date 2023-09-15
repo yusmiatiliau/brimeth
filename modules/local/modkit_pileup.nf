@@ -42,20 +42,18 @@ process MODKIT_PILEUP {
     task.ext.when == null || task.ext.when
 
     script:
-    def threshold   = task.ext.threshold   ?: ''
-    def args2  = task.ext.args2  ?: ''
-    def ref    = motif_CG || motif_CHG || motif_CHH || motif_A ? "${reference ?: reads}"
+    def args        = task.ext.args          ?                      : ''
+    def args2       = task.ext.args2         ?                      : ''
+    def args3       = task.ext.args3         ?                      : ''
+    def ref         = args3                  ? "--ref ${reads}.fasta": ''
 
     """
     modkit pileup \\
     $bam \\
     ${meta.id}.bed \\
-    $threshold \\
+    $args \\
     $args2 \\
-    $motif_CG \\
-    $motif_CHG \\
-    $motif_CHH \\
-    $motif_A \\
+    $args3 \\
     $ref \\
     --log-filepath ${meta.id}.log
 

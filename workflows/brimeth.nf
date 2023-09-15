@@ -167,10 +167,6 @@ workflow BRIMETH {
     //
     MODKIT_PILEUP {
         ch_bam_bai
-        params.motif_CG
-        params.motif_CHG
-        params.motif_CHH
-        params.motif_A
     }
     ch_bed = MODKIT_PILEUP.out.bed // channel: [ val(meta), file(bed) ]
     ch_versions = ch_versions.mix(MODKIT_PILEUP.out.versions)
