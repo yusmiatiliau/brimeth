@@ -155,19 +155,22 @@ workflow BRIMETH {
         ch_bam,
         //[[:],params.gff]
     )
+
     //
-    // MODULE: Run Samtools_stats
+    // SUBWORKFLOW: Run Samtools_stats
     //
     BAM_STATS_SAMTOOLS (
         ch_bam_bai,
         [[:], params.fasta]
     )
+
     //
     // MODULE: Run Modkit
     //
-    MODKIT_PILEUP {
-        ch_bam_bai
-    }
+    MODKIT_PILEUP (
+        ch_bam_bai,
+        params.fasta
+    )
     ch_bed = MODKIT_PILEUP.out.bed // channel: [ val(meta), file(bed) ]
     ch_versions = ch_versions.mix(MODKIT_PILEUP.out.versions)
 
