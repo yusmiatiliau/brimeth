@@ -266,6 +266,18 @@
                 }
             }
         },
+        "bam2fq": {
+            "title": "bam2fq",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "split": {
+                    "type": "string",
+                    "description": "Split fastq into reads 1 and 2"
+                }
+            }
+        },
         "minimap2_functions": {
             "title": "Minimap2 Functions",
             "type": "object",
@@ -315,6 +327,68 @@
                     "description": "min quality score to filter"
                 }
             }
+        },
+        "modkit": {
+            "title": "Modkit",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "modthresholds_C": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase C"
+                },
+                "modthresholds_A": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase C"
+                },
+                "modthresholds_m": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase mC"
+                },
+                "modthresholds_a": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase mA"
+                },
+                "motif_CG": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "include CG context in bed file, require reference"
+                },
+                "threshold_A": {
+                    "type": "number",
+                    "description": "Threshold for canonical base A"
+                },
+                "sept": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "use tab as separator"
+                },
+                "motif_CHH": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "include CHH context in bed file, require reference"
+                },
+                "motif_CHG": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "include CHG context in bed file, require reference"
+                },
+                "motif_A": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Include A context in bed file (for 6mA), require reference"
+                },
+                "threshold_C": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for canonical base C"
+                }
+            }
         }
     },
     "allOf": [
@@ -334,10 +408,16 @@
             "$ref": "#/definitions/generic_options"
         },
         {
+            "$ref": "#/definitions/bam2fq"
+        },
+        {
             "$ref": "#/definitions/minimap2_functions"
         },
         {
             "$ref": "#/definitions/chopper"
+        },
+        {
+            "$ref": "#/definitions/modkit"
         }
     ]
 }
