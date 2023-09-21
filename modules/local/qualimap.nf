@@ -17,7 +17,7 @@
 
 process QUALIMAP {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_high_memory'
 
     // TODO nf-core: List required Conda package(s).
     //               Software MUST be pinned to channel (i.e. "bioconda"), version (i.e. "1.10").
@@ -43,7 +43,7 @@ process QUALIMAP {
     def args    = task.ext.args ?: ''
     def prefix  = task.ext.prefix ?: "${meta.id}"
     //def regions = gff ? "--gff $gff": ''
-    //def memory  = (task.memory.mega*0.8).intValue() + 'M'
+    def memory  = (task.memory.mega*0.8).intValue() + 'M'
 
     // TODO nf-core: Where possible, a command MUST be provided to obtain the version number of the software e.g. 1.10
     //               If the software is unable to output a version number on the command-line then it can be manually specified
@@ -75,6 +75,7 @@ process QUALIMAP {
         -bam $bam \\
         -outdir $prefix \\
         -nt $task.cpus \\
+        --java-mem-size=$memory
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
