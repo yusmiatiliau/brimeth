@@ -12,7 +12,7 @@
 
 ## Introduction
 
-**nf-core/brimeth** is a bioinformatics pipeline that ...
+**nf-core/brimeth** is a bioinformatics pipeline that takes a BAM output from ONT sequencing with modified base (MM,ML) tags, writes fastq file, maps to reference, performs quality control and filtering and finally writes the bedmethyl file containing methylation information per site
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
