@@ -32,9 +32,7 @@ class RowChecker:
     def __init__(
         self,
         sample_col="sample",
-        first_col="fastq_1",
-        second_col="fastq_2",
-        single_col="single_end",
+        first_col="bam",
         **kwargs,
     ):
         """
@@ -44,19 +42,12 @@ class RowChecker:
             sample_col (str): The name of the column that contains the sample name
                 (default "sample").
             first_col (str): The name of the column that contains the first (or only)
-                FASTQ file path (default "fastq_1").
-            second_col (str): The name of the column that contains the second (if any)
-                FASTQ file path (default "fastq_2").
-            single_col (str): The name of the new column that will be inserted and
-                records whether the sample contains single- or paired-end sequencing
-                reads (default "single_end").
+                bam file path (default "bam").
 
         """
         super().__init__(**kwargs)
         self._sample_col = sample_col
         self._first_col = first_col
-        self._second_col = second_col
-        self._single_col = single_col
         self._seen = set()
         self.modified = []
 

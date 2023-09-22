@@ -265,6 +265,130 @@
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
                 }
             }
+        },
+        "bam2fq": {
+            "title": "bam2fq",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "split": {
+                    "type": "string",
+                    "description": "Split fastq into reads 1 and 2"
+                }
+            }
+        },
+        "minimap2_functions": {
+            "title": "Minimap2 Functions",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fab fa-black-tie",
+            "properties": {
+                "cigar_bam": {
+                    "type": "boolean",
+                    "description": "Do you want to have a cigar bam"
+                },
+                "cigar_paf_format": {
+                    "type": "boolean",
+                    "description": "Do you want to have a paf format file"
+                },
+                "bam_format": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Do you want to have a bam format file"
+                },
+                "schema_ignore_params": {
+                    "type": "string",
+                    "default": "genomes",
+                    "description": "I'm not 100% sure what this is?"
+                }
+            }
+        },
+        "chopper": {
+            "title": "Chopper",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "minlength": {
+                    "type": "integer",
+                    "default": 2000,
+                    "description": "min read length to filter"
+                },
+                "maxlength": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "max read length to filter"
+                },
+                "quality": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "min quality score to filter"
+                }
+            }
+        },
+        "modkit": {
+            "title": "Modkit",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "modthresholds_C": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase C"
+                },
+                "modthresholds_A": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase C"
+                },
+                "modthresholds_m": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase mC"
+                },
+                "modthresholds_a": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for modbase mA"
+                },
+                "motif_CG": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "include CG context in bed file, require reference"
+                },
+                "threshold_A": {
+                    "type": "number",
+                    "description": "Threshold for canonical base A"
+                },
+                "sept": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "use tab as separator"
+                },
+                "motif_CHH": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "include CHH context in bed file, require reference"
+                },
+                "motif_CHG": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "include CHG context in bed file, require reference"
+                },
+                "motif_A": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Include A context in bed file (for 6mA), require reference"
+                },
+                "threshold_C": {
+                    "type": "number",
+                    "default": 0.8,
+                    "description": "Threshold for canonical base C"
+                }
+            }
         }
     },
     "allOf": [
@@ -282,6 +406,18 @@
         },
         {
             "$ref": "#/definitions/generic_options"
+        },
+        {
+            "$ref": "#/definitions/bam2fq"
+        },
+        {
+            "$ref": "#/definitions/minimap2_functions"
+        },
+        {
+            "$ref": "#/definitions/chopper"
+        },
+        {
+            "$ref": "#/definitions/modkit"
         }
     ]
 }
