@@ -41,16 +41,16 @@
 <!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
      Explain what rows and columns represent. For instance (please edit as appropriate):
 
-First, prepare a samplesheet with your input data that looks as follows:
+>First, prepare a samplesheet with your input data that looks as follows:
 
-`samplesheet.csv`:
+>`samplesheet.csv`:
 
-```csv
-sample,bam
-sample1,file.bam
-```
+>```csv
+>sample,bam
+>sample1,file.bam
+>```
 
-Each row represents a bam file
+>Each row represents a bam file
 
 -->
 
