@@ -25,10 +25,10 @@
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
 1. Converting bam to fastq ([`samtools bam2fq`](https://github.com/samtools/samtools)), carrying the MM,ML tags for modified base
-2. Performs quality control (FastQC) and filtering (Chopper) of fastq
-3. Map fastq to reference genome (minimap2)
-4. Performs quality control (Qualimap, Samtools)
-5. Extract methylation calls per site into a bedmethyl file (modkit)
+2. Performs quality control ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)) and filtering ([`Chopper`](https://github.com/wdecoster/chopper) of fastq
+3. Map fastq to reference genome ([`minimap2`](https://github.com/lh3/minimap2))
+4. Performs quality control ([`Qualimap`](http://qualimap.conesalab.org/), [`Samtools stats`]((https://github.com/samtools/samtools))
+5. Extract methylation calls per site into a bedmethyl file ([`modkit`](https://github.com/nanoporetech/modkit))
 6. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
