@@ -1,0 +1,18 @@
+CHOPPER:
+  chopper: 0.2.0
+CUSTOM_DUMPSOFTWAREVERSIONS:
+  python: 3.11.0
+  yaml: '6.0'
+FASTQC:
+  fastqc: 0.11.9
+MINIMAP2_ALIGN:
+  minimap2: 2.24-r1122
+MODKIT_PILEUP:
+  modkit: 0.1.13
+SAMTOOLS_BAM2FQ:
+  samtools: '1.17'
+SAMTOOLS_INDEX:
+  samtools: '1.17'
+Workflow:
+  Nextflow: 23.04.2
+  nf-core/brimeth: 1.0dev

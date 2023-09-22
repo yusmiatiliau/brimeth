@@ -128,9 +128,9 @@ workflow BRIMETH {
     //
     // MODULE: Run Samtools index
     //
-    SAMTOOLS_INDEX {
+    SAMTOOLS_INDEX (
         ch_bam
-    }
+    )
     ch_bai = SAMTOOLS_INDEX.out.bai // channel: [ val(meta), file(bai) ]
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 

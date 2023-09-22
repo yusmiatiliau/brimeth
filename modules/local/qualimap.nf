@@ -40,10 +40,11 @@ process QUALIMAP {
     task.ext.when == null || task.ext.when
 
     script:
-    def args    = task.ext.args ?: ''
-    def prefix  = task.ext.prefix ?: "${meta.id}"
+    def args    = task.ext.args     ?: ''
+    def prefix  = task.ext.prefix   ?: "${meta.id}"
     //def regions = gff ? "--gff $gff": ''
     def memory  = (task.memory.mega*0.8).intValue() + 'M'
+    //mem_size  = task.mem_size      ?: ''
 
     // TODO nf-core: Where possible, a command MUST be provided to obtain the version number of the software e.g. 1.10
     //               If the software is unable to output a version number on the command-line then it can be manually specified
