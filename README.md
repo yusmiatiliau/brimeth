@@ -12,7 +12,7 @@
 
 ## Introduction
 
-**nf-core/brimeth** is a bioinformatics pipeline that ...
+**nf-core/brimeth** is a bioinformatics pipeline that take a bam file from ONT sequencing, containing modbase information in MM,ML tags, writes fastq file, performs QC and filtering, maps to reference genome, and write a bedmethyl file.
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
@@ -24,8 +24,12 @@
      workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+1. Converting bam to fastq (samtools bam2fq), carrying the MM,ML tags for modified base
+2. Performs quality control (FastQC) and filtering (Chopper) of fastq
+3. Map fastq to reference genome (minimap2)
+4. Performs quality control (Qualimap, Samtools)
+5. Extract methylation calls per site into a bedmethyl file (modkit)
+6. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
