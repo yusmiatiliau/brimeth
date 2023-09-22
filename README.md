@@ -24,7 +24,7 @@
      workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
-1. Converting bam to fastq (['samtools bam2fq'](https://github.com/samtools/samtools)), carrying the MM,ML tags for modified base
+1. Converting bam to fastq ([`samtools bam2fq`](https://github.com/samtools/samtools)), carrying the MM,ML tags for modified base
 2. Performs quality control (FastQC) and filtering (Chopper) of fastq
 3. Map fastq to reference genome (minimap2)
 4. Performs quality control (Qualimap, Samtools)
