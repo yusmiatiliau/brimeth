@@ -1,6 +1,6 @@
 process MODKIT_PILEUP {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_medium'
 
     container "docker.io/ontresearch/wf-human-variation-methyl:shaa6e616571797d97ae2736c7ebdcb4613fe77f263"
 
