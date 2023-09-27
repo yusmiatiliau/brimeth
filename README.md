@@ -92,11 +92,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/brimeth was originally written by Cen.
-
-We thank the following people for their extensive assistance in the development of this pipeline:
-
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+nf-core/brimeth was originally written by Cen and Chris Haakkart
 
 ## Contributions and Support
 
