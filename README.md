@@ -92,7 +92,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/brimeth was originally written by Cen and Chris Haakkart
+nf-core/brimeth was originally written by Yusmiati Liau and Christopher Haakkart
 
 ## Contributions and Support
 
