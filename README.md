@@ -92,17 +92,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/brimeth was originally written by Cen.
-
-We thank the following people for their extensive assistance in the development of this pipeline:
-
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
-
-## Contributions and Support
-
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
-
-For further information or help, don't hesitate to get in touch on the [Slack `#brimeth` channel](https://nfcore.slack.com/channels/brimeth) (you can join with [this invite](https://nf-co.re/join/slack)).
+nf-core/brimeth was originally written by Cen and Chris Haakkart.
 
 ## Citations
 
