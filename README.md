@@ -24,10 +24,10 @@
      workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
-1. Converting bam to fastq ([`samtools bam2fq`](https://github.com/samtools/samtools)), carrying the MM,ML tags for modified base
-2. Performs quality control ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)) and reads quality and length filtering ([`Chopper`](https://github.com/wdecoster/chopper))
+1. Convert bam to fastq ([`samtools bam2fq`](https://github.com/samtools/samtools)), carrying the MM,ML tags for modified base
+2. Perform quality control ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)) and reads quality and length filtering ([`Chopper`](https://github.com/wdecoster/chopper))
 3. Map fastq to reference genome ([`minimap2`](https://github.com/lh3/minimap2))
-4. Performs quality control ([`Qualimap`](http://qualimap.conesalab.org/), [`Samtools stats`]((https://github.com/samtools/samtools))
+4. Perform quality control ([`Qualimap`](http://qualimap.conesalab.org/), [`Samtools stats`]((https://github.com/samtools/samtools))
 5. Extract methylation calls per site into a bedmethyl file ([`modkit`](https://github.com/nanoporetech/modkit))
 6. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
